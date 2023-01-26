@@ -1,7 +1,7 @@
 const http = require('http');
 const http_api = require('./routers/http-api')
-const port = 3000;
+const PORT = process.env.PORT;
 
-http.createServer(http_api.router).listen(port);
+http.createServer(http_api.router).listen(PORT||3000);
 
 
