@@ -1,0 +1,19 @@
+{
+  "name": "real-file-system",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Brometey/real-file-system.git"
+  },
+  "author": "Adyshev BN",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Brometey/real-file-system/issues"
+  },
+  "homepage": "https://github.com/Brometey/real-file-system#readme"
+}
