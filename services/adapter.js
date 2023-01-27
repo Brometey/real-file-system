@@ -31,21 +31,25 @@ exports.saveFile = async (fileName, mimeType, fileSize) => {
 }
 
 exports.getFile = async (fileName) => {
+    try{
 
     const data = storage.getData(META_PATH);
 
     const metaArray = await storage.sanitize(data);
 
     const metaFile = await metaArray.find(element => element.name === fileName);
-
-    const filePath =  storage.getPathName(fileName, metaFile);
+    if (!metaFile) return null;
+    const filePath =  await storage.getPathName(fileName, metaFile);
     
     return {
         'filePath': filePath,
         'file-size': metaFile['file-size'],
         'mime-type': metaFile['mime-type']
     }
-
+    }
+    catch (err){
+        console.log(err);
+    }
     
     // res.setHeader('Content-Disposition', 'attachment');
     // res.setHeader('Content-length', meta_file['file-size']);

@@ -28,6 +28,8 @@ exports.getRequest = async (req, res) => {
     const fileName = await req.url.split('/')[2];
 
     const filePathAndData = await adapter.getFile(fileName);
+
+    if (!filePathAndData) {await res.end(`There is no file "${fileName}"`); return;}
         
     await res.setHeader('Content-type', [filePathAndData['mime-type']]);
     await res.setHeader('Content-length', [filePathAndData['file-size']]);
