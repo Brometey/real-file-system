@@ -24,8 +24,20 @@ exports.putRequest = (req, res) => {
     res.end('hewou');
 }
 
-exports.getRequest = (req, res) => {
-    const fileName = req.url.split('/')[2];
+exports.getRequest = async (req, res) => {
+    const fileName = await req.url.split('/')[2];
 
-    adapter.getFile(fileName, res);
+    const filePathAndData = await adapter.getFile(fileName);
+        
+    await res.setHeader('Content-type', [filePathAndData['mime-type']]);
+    await res.setHeader('Content-length', [filePathAndData['file-size']]);
+
+    const readStream = await storage.readFile(filePathAndData['filePath']);
+
+    await readStream.pipe(res);
+
+    readStream.on('end', ()=> {
+        res.end();
+    })
+    
 }

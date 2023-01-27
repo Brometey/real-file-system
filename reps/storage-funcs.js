@@ -68,6 +68,6 @@ exports.getPathName = (fileName, file) => {
     return filePath;
 }
 
-exports.readFile = (path) => {
+exports.readFile = async (path) => {
     return fs.createReadStream(path);
 }

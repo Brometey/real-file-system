@@ -30,30 +30,23 @@ exports.saveFile = (fileName, mime_type, file_size) => {
 
 }
 
-exports.getFile = (fileName, res) => {
+exports.getFile = async (fileName) => {
 
     const data = storage.getData(META_PATH);
 
-    const meta_array = storage.sanitize(data);
+    const meta_array = await storage.sanitize(data);
 
-    const meta_file = meta_array.find(element => element.name === fileName);
+    const meta_file = await meta_array.find(element => element.name === fileName);
 
-    const filePath = storage.getPathName(fileName, meta_file);
+    const filePath =  storage.getPathName(fileName, meta_file);
+    
+    return {
+        'filePath': filePath,
+        'file-size': meta_file['file-size'],
+        'mime-type': meta_file['mime-type']
+    }
 
-    const readStream = storage.readFile(filePath);
-
-    res.setHeader('Content-Disposition', 'attachment');
-    res.setHeader('Content-length', meta_file['file-size']);
-    res.setHeader('Content-type', meta_file['mime-type']);
-
-    readStream.pipe(res);
-
-    readStream.on('error', (err) => {
-        res.end(err);
-    });
-
-    readStream.on('end', () => {
-        res.end();
-    });
-
+    
+    // res.setHeader('Content-Disposition', 'attachment');
+    // res.setHeader('Content-length', meta_file['file-size']);
 }

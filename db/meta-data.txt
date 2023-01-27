@@ -1,1 +1,1 @@
-{"name":"hewof","mime-type":"image/png","file-size":"259457"}{"name":"hewofa","mime-type":"image/png","file-size":"76289"}
+{"name":"hewof","mime-type":"text/plain","file-size":"9"}
