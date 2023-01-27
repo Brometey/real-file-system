@@ -3,25 +3,25 @@ const storage = require('../reps/storage-funcs')
 const mime = require('../libs/mime-types-dictionary')
 const path = require('path');
 
-exports.putRequest = (req, res) => {
+exports.putRequest = async (req, res) => {
     const fileName = req.url.split('/')[2];
-    const mime_type = req.headers['content-type'];
-    const file_size = req.headers['content-length'];
+    const mimeType = req.headers['content-type'];
+    const fileSize = req.headers['content-length'];
 
-    const extension = mime[mime_type];
+    const extension = mime[mimeType];
 
     const filePath = `D:/nest-projects/real-file-system/upload/${fileName}${extension}`;
 
-    adapter.saveFile(fileName, mime_type, file_size);
+    await adapter.saveFile(fileName, mimeType, fileSize);
 
     const writeStream = storage.writeFile(filePath);
-    req.pipe(writeStream);
+    await req.pipe(writeStream);
 
     writeStream.on('error', (err) => {
         console.log(err);
     })
 
-    res.end('hewou');
+    await res.end('hewou');
 }
 
 exports.getRequest = async (req, res) => {

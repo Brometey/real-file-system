@@ -3,9 +3,9 @@ const META_PATH = 'D:/nest-projects/real-file-system/db/meta-data.txt';
 const storage = require('../reps/storage-funcs')
 const path = require('path');
 
-exports.saveFile = (fileName, mime_type, file_size) => {
+exports.saveFile = async (fileName, mimeType, fileSize) => {
 
-    const extension = mime[mime_type];
+    const extension = mime[mimeType];
 
     const filePath = `D:/nest-projects/real-file-system/upload/${fileName}${extension}`;
 
@@ -20,13 +20,13 @@ exports.saveFile = (fileName, mime_type, file_size) => {
 
     }
 
-    const file_meta = {
+    const fileMeta = {
         "name": fileName,
-        "mime-type": mime_type,
-        "file-size": file_size
+        "mime-type": mimeType,
+        "file-size": fileSize
     }
 
-    storage.writeMetData(META_PATH, file_meta);
+    storage.writeMetData(META_PATH, fileMeta);
 
 }
 
@@ -34,16 +34,16 @@ exports.getFile = async (fileName) => {
 
     const data = storage.getData(META_PATH);
 
-    const meta_array = await storage.sanitize(data);
+    const metaArray = await storage.sanitize(data);
 
-    const meta_file = await meta_array.find(element => element.name === fileName);
+    const metaFile = await metaArray.find(element => element.name === fileName);
 
-    const filePath =  storage.getPathName(fileName, meta_file);
+    const filePath =  storage.getPathName(fileName, metaFile);
     
     return {
         'filePath': filePath,
-        'file-size': meta_file['file-size'],
-        'mime-type': meta_file['mime-type']
+        'file-size': metaFile['file-size'],
+        'mime-type': metaFile['mime-type']
     }
 
     

@@ -3,9 +3,9 @@ const utils = require('../utils')
 const path = require('path');
 const mime = require('../libs/mime-types-dictionary')
 
-exports.ifMetaFileExists = (path) => fs.existsSync(path);
+exports.ifMetaFileExists = async (path) => fs.existsSync(path);
 
-exports.deleteData = (path) => {
+exports.deleteData = async (path) => {
     fs.unlinkSync(path)
 };
 
@@ -14,7 +14,7 @@ exports.getData = (path) => fs.readFileSync(path, {
     flag: 'r'
 });
 
-exports.deleteAlreadyExistingFile = (fileName) => {
+exports.deleteAlreadyExistingFile = async (fileName) => {
     const files = utils.globSync('D:/nest-projects/real-file-system/upload', new RegExp(`${fileName}.` + '.*'));
 
     files.forEach(file => {
@@ -23,46 +23,46 @@ exports.deleteAlreadyExistingFile = (fileName) => {
 
 }
 
-exports.rewriteMetadata = (data, metaPath, fileName) => {
+exports.rewriteMetadata = async (data, metaPath, fileName) => {
     const sanitized = '[' + data.replace(/}{/g, '},{') + ']';
-    let meta_data = JSON.parse(sanitized);
-    let index_delete;
+    let metaData = await JSON.parse(sanitized);
+    let indexToDelete;
 
-    if (meta_data.find(element => element.name === fileName)) {
-        meta_data.map((element, index) => {
+    if (metaData.find(element => element.name === fileName)) {
+        await metaData.map((element, index) => {
             if (element.name === fileName)
-                index_delete = index;
+                indexToDelete = index;
         })
-        meta_data.splice(index_delete, 1);
+        await metaData.splice(indexToDelete, 1);
     }
 
-    if (meta_data.length !== 0) {
-        meta_data.map(element => {
-            let string_element = JSON.stringify(element);
-            fs.appendFileSync(metaPath, string_element);
+    if (metaData.length !== 0) {
+        await metaData.map(element => {
+            let stringElement = JSON.stringify(element);
+            fs.appendFileSync(metaPath, stringElement);
         })
     }
 
 }
 
-exports.writeMetData = (metaPath, file_meta) => {
-    const file_meta_string = JSON.stringify(file_meta);
+exports.writeMetData = async (metaPath, fileMeta) => {
+    const fileMetaString = JSON.stringify(fileMeta);
 
-    fs.appendFileSync(metaPath, file_meta_string);
+    fs.appendFileSync(metaPath, fileMetaString);
 }
 
 exports.writeFile = (path) => fs.createWriteStream(path);
 
-exports.sanitize = (data) => {
+exports.sanitize = async (data) => {
     const sanitized = '[' + data.replace(/}{/g, '},{') + ']';
-    const meta_array = JSON.parse(sanitized);
+    const metaArray = await JSON.parse(sanitized);
 
-    return meta_array;
+    return await metaArray;
 }
 
-exports.getPathName = (fileName, file) => {
-    const file_type = file['mime-type'];
-    const extension = mime[file_type];
+exports.getPathName = async (fileName, file) => {
+    const fileType = file['mime-type'];
+    const extension = mime[fileType];
 
     const filePath = `./upload/${fileName}${extension}`
     return filePath;
